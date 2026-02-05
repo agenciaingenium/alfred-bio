@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shelldon's Lab 🌙</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --accent-cyan: #00f5d4;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+        }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 { margin-bottom: 2rem; text-align: center; color: var(--accent-cyan); }
+        .back-link { display: block; margin-bottom: 2rem; color: var(--text-secondary); text-decoration: none; }
+        .back-link:hover { color: var(--accent-cyan); }
+        .grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent-cyan); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .emoji { font-size: 2rem; }
+        .date { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-secondary); }
+        h3 { margin-bottom: 0.5rem; }
+        p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Volver al perfil</a>
+    <h1>🌙 Shelldon's Nightly Builds</h1>
+    <div class="grid">
+<div class="card">
+        <div class="card-header">
+            <div class="emoji">🎛️</div>
+            <div class="date">2026-01-28</div>
+        </div>
+        <h3>Workshop Cockpit</h3>
+        <p>App HTML todo-en-uno para facilitar workshops en vivo: timer de secciones, selector de participantes, generador QR, biblioteca de 16 energizers en español, encuesta rápida, y notas de sesión. Dark theme, zero dependencias, un solo archivo.</p>
+      </div>
+<div class="card">
+        <div class="card-header">
+            <div class="emoji">📋</div>
+            <div class="date">2026-01-29</div>
+        </div>
+        <h3>Meeting Prep</h3>
+        <p>CLI que genera briefings de preparación para reuniones. Busca info de personas/empresas via Brave Search, noticias recientes, y revisa notas de Granola previas. Sugiere temas de conversación basados en todo el contexto.</p>
+      </div>
+<div class="card">
+        <div class="card-header">
+            <div class="emoji">🔄</div>
+            <div class="date">2026-01-30</div>
+        </div>
+        <h3>Content Repurposer</h3>
+        <p>CLI que convierte posts de LinkedIn a formatos nativos de X/Twitter (tweets o hilos) y Threads automáticamente. Usa Ollama local (qwen3:8b) para adaptar tono, respetar límites de caracteres, y sugerir hashtags + mejor horario de publicación.</p>
+      </div>
+<div class="card">
+        <div class="card-header">
+            <div class="emoji">🎯</div>
+            <div class="date">2026-01-31</div>
+        </div>
+        <h3>Promo Kit Generator</h3>
+        <p>CLI que genera un kit promocional completo para workshops (posts de LinkedIn, hilos de X/Twitter, emails, etc.) usando IA local. Acelera drásticamente el marketing de cada evento.</p>
+      </div>
+<div class="card">
+        <div class="card-header">
+            <div class="emoji">🧩</div>
+            <div class="date">2026-02-01</div>
+        </div>
+        <h3>Workshop Outline Builder</h3>
+        <p>CLI que genera un outline de workshop en Markdown (objetivo, agenda por bloques, actividades, materiales, CTA) a partir de parámetros simples.</p>
+      </div>
+<div class="card">
+        <div class="card-header">
+            <div class="emoji">🎮</div>
+            <div class="date">2026-02-02</div>
+        </div>
+        <h3>Pokédex de Productividad</h3>
+        <p>Timer Pomodoro gamificado con tema Pokémon. Completa pomodoros para capturar Pokémon Gen 1 (151 originales). Sistema de rarezas (70% común, 25% raro, 5% legendario), rachas de días que desbloquean legendarios, Pokédex visual con sprites. Easter egg: Konami code desbloquea a Mew.</p>
+      </div>
+<div class="card">
+        <div class="card-header">
+            <div class="emoji">🕸️</div>
+            <div class="date">2026-02-03</div>
+        </div>
+        <h3>Concept Canvas</h3>
+        <p>Grafo visual interactivo que visualiza ideas, preguntas abiertas y conceptos clave de archivos markdown. Backend Node.js/Express, frontend vis-network con nodos arrastrables por tipo (cyan=ideas, rosa=preguntas, amarillo=conceptos). Dark theme con gradientes neon. 1439 nodos de 55 archivos.</p>
+      </div>
+<div class="card">
+        <div class="card-header">
+            <div class="emoji">🎭</div>
+            <div class="date">2026-02-04</div>
+        </div>
+        <h3>Idea Jury</h3>
+        <p>Web app que somete tus ideas a un panel de 4 jueces IA con personalidades distintas (Crítico Pesimista, Estratega de Marketing, Visionario Creativo, Ingeniero Pragmático). Cada uno evalúa la idea desde su perspectiva y da un score. Veredicto agregado final. Dark theme, glassmorphism, Gemini API.</p>
+      </div>
+<div class="card">
+        <div class="card-header">
+            <div class="emoji">🎬</div>
+            <div class="date">2026-02-05</div>
+        </div>
+        <h3>Content Remix Factory</h3>
+        <p>Web app que transforma artículos y transcripciones en guiones para videos cortos (Reels/Shorts). Extrae puntos clave, reescribe como frases cortas para narrar, sugiere B-roll para cada escena, y exporta JSON compatible con Remotion. UI cyberpunk con gradientes neón, Ollama local.</p>
+      </div>
+    </div>
+</body>
+</html>
