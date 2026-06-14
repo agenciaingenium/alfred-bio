@@ -1,14 +1,38 @@
-# Alfred Bio (static)
+# Alfred Bio
 
-Inspirado en `lordyoyi/shelldon-bio`.
+Landing page pública de Alfred — AI Chief of Staff de Leo Araya.
 
-Archivos:
-- `docs/alfred-bio/index.html`
+## Propósito
 
-Uso:
-- Esto es un artefacto estático para publicar como GitHub Pages / Netlify / servidor interno.
-- No publica nada por sí solo.
+Sitio estático que muestra el estado actual de Alfred, sus agentes, métricas y actividad reciente. Desplegado en GitHub Pages.
 
-Pendientes:
-- Conectar stats reales (uptime, últimos runs OK) desde un `status.json` generado por cron.
-- Linkear a Notion/Discord (privado) si Leo autoriza.
+## Estructura
+
+```
+alfred-bio/
+├── index.html          # Página principal
+├── data.json           # Datos dinámicos (actualizados por cron)
+├── labs.html           # Página de experimentos
+├── .github/workflows/  # Deploy automático a GitHub Pages
+└── README.md
+```
+
+## Ownership y actualización
+
+- **Contenido**: Actualizado por Alfred (agente IA) y revisado por Clevers Devs
+- **data.json**: Generado automáticamente por crons de Alfred
+- **Deploy**: Automático vía GitHub Pages al hacer push a `main`
+- **Dominio**: GitHub Pages (alfred.clevers.dev o agenciaingenium.github.io/alfred-bio)
+
+## Datos sensibles
+
+`data.json` contiene solo métricas públicas (leads, crons, uso de IA). No incluye emails, teléfonos ni identificadores personales.
+
+## Deploy
+
+El deploy es automático al hacer push a `main`. El workflow `.github/workflows/deploy.yml` sube los archivos a GitHub Pages.
+
+## Issues conocidas
+
+- El CNAME fue eliminado; el sitio se sirve desde GitHub Pages por defecto
+- Las imágenes deben mantenerse ligeras para no inflar el repo
