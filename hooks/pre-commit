@@ -1,0 +1,37 @@
+#!/bin/bash
+# Pre-commit hook for alfred-bio
+# Install: cp hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+set -e
+
+echo "Running pre-commit checks..."
+
+# Check HTML syntax with htmlhint
+if command -v htmlhint &> /dev/null; then
+    echo "Running HTML lint..."
+    htmlhint "*.html" "**/*.html" --config .htmlhintrc
+else
+    echo "WARNING: htmlhint not installed. Run: npm install -g htmlhint"
+fi
+
+# Check for sensitive data in staged files
+echo "Checking for sensitive data..."
+if git diff --cached --name-only | xargs grep -l -E "(api[_-]?key|password|secret|token)" 2>/dev/null; then
+    echo "WARNING: Possible sensitive data detected in staged files."
+    echo "Please review before committing."
+    exit 1
+fi
+
+# Check for large files (>1MB)
+echo "Checking for large files..."
+for file in $(git diff --cached --name-only); do
+    if [ -f "$file" ]; then
+        size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null)
+        if [ "$size" -gt 1048576 ]; then
+            echo "WARNING: Large file detected: $file ($(($size / 1024))KB)"
+            echo "Consider using Git LFS for large files."
+        fi
+    fi
+done
+
+echo "Pre-commit checks passed!"
