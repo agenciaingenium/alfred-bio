@@ -1,0 +1,50 @@
+name: Regenerate status.json
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # every 6 hours
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    name: Run generate-status.php and commit status.json
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Generate status.json
+        run: php bin/generate-status.php
+
+      - name: Verify status.json exists
+        run: |
+          if [ ! -f status.json ]; then
+            echo "status.json was not generated"
+            exit 1
+          fi
+          echo "status.json contents:"
+          cat status.json
+
+      - name: Commit status.json
+        run: |
+          git config user.name "alfred-bot"
+          git config user.email "alfred-bot@users.noreply.github.com"
+          git add status.json
+          if git diff --cached --quiet; then
+            echo "No changes to status.json — nothing to commit."
+            exit 0
+          fi
+          git commit -m "ci(status): refresh status.json from cron"
+          git push

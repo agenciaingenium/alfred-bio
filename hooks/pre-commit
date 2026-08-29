@@ -1,0 +1,70 @@
+#!/bin/bash
+# Pre-commit hook for alfred-bio
+# Install: cp hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+set -e
+
+echo "Running pre-commit checks..."
+
+# Check HTML syntax with htmlhint
+if command -v htmlhint &> /dev/null; then
+    echo "Running HTML lint..."
+    htmlhint "*.html" "**/*.html" --config .htmlhintrc
+else
+    echo "WARNING: htmlhint not installed. Run: npm install -g htmlhint"
+fi
+
+# Check for sensitive data in staged files (api keys, passwords, tokens).
+echo "Checking for sensitive credentials..."
+if git diff --cached --name-only | xargs grep -l -E "(api[_-]?key|password|secret|token)" 2>/dev/null; then
+    echo "WARNING: Possible credentials detected in staged files."
+    echo "Please review before committing."
+    exit 1
+fi
+
+# Validate data.json structure and reject PII (CLE-172).
+echo "Validating data.json..."
+DATA_JSON_STAGED=$(git diff --cached --name-only -- 'data.json')
+if [ -n "$DATA_JSON_STAGED" ]; then
+    DATA_JSON=$(git show :data.json 2>/dev/null || echo "")
+    if [ -z "$DATA_JSON" ]; then
+        DATA_JSON=$(cat data.json 2>/dev/null || echo "")
+    fi
+
+    if command -v php &> /dev/null; then
+        VALIDATION=$(php -r '
+            $json = file_get_contents("php://stdin");
+            if ($json === false || $json === "") { echo "EMPTY"; exit; }
+            $data = json_decode($json, true);
+            if (!is_array($data)) { echo "INVALID_JSON: " . json_last_error_msg(); exit(1); }
+            $required = ["updatedAt", "stats", "ai", "activity"];
+            foreach ($required as $key) {
+                if (!array_key_exists($key, $data)) { echo "MISSING_KEY: " . $key; exit(1); }
+            }
+            if (preg_match("/[\w.+-]+@[\w-]+\.[\w.-]+/", $json)) { echo "EMAIL_FOUND"; exit(1); }
+            if (preg_match("/\+?\d[\d\s().-]{7,}/", $json)) { echo "PHONE_FOUND"; exit(1); }
+            echo "OK";
+        ' <<< "$DATA_JSON")
+        if [ "$VALIDATION" != "OK" ]; then
+            echo "ERROR: data.json validation failed: $VALIDATION"
+            echo "data.json must be valid JSON with keys (updatedAt, stats, ai, activity) and no emails/phones."
+            exit 1
+        fi
+    else
+        echo "WARNING: php not installed, skipping data.json validation"
+    fi
+fi
+
+# Check for large files (>1MB)
+echo "Checking for large files..."
+for file in $(git diff --cached --name-only); do
+    if [ -f "$file" ]; then
+        size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null)
+        if [ "$size" -gt 1048576 ]; then
+            echo "WARNING: Large file detected: $file ($(($size / 1024))KB)"
+            echo "Consider using Git LFS for large files."
+        fi
+    fi
+done
+
+echo "Pre-commit checks passed!"

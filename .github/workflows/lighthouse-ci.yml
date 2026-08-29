@@ -1,0 +1,45 @@
+name: Lighthouse CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lighthouse:
+    name: Lighthouse audit (live GitHub Pages URL)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Wait for GitHub Pages deploy to settle
+        env:
+          GH_PAGES_URL: ${{ steps.pages.outputs.url }}
+        run: |
+          echo "Sleeping 60s to let GitHub Pages finish propagating the latest commit..."
+          sleep 60
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            https://alfred.clevers.dev/
+            https://alfred.clevers.dev/labs.html
+            https://alfred.clevers.dev/changelog.html
+          budgetPath: ./lighthouse-budget.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          runs: 1

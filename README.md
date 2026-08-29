@@ -11,9 +11,14 @@ Sitio estático que muestra el estado actual de Alfred, sus agentes, métricas y
 ```
 alfred-bio/
 ├── index.html          # Página principal
+├── changelog.html      # Historial público de releases (Keep a Changelog)
 ├── data.json           # Datos dinámicos (actualizados por cron)
+├── status.json         # Uptime + últimos runs (regenerado cada 6h)
 ├── labs.html           # Página de experimentos
-├── .github/workflows/  # Deploy automático a GitHub Pages
+├── bin/generate-status.php  # Script que regenera status.json
+├── hooks/pre-commit     # htmlhint + guardas de secretos/PII
+├── .github/workflows/  # deploy / lint / status-cron / lighthouse-ci
+├── lighthouse-budget.json # Performance/SEO budgets
 └── README.md
 ```
 
@@ -27,6 +32,22 @@ alfred-bio/
 ## Datos sensibles
 
 `data.json` contiene solo métricas públicas (leads, crons, uso de IA). No incluye emails, teléfonos ni identificadores personales.
+
+El hook de pre-commit (`hooks/pre-commit`) valida automáticamente que `data.json`:
+
+- Sea JSON válido.
+- Tenga las claves requeridas (`updatedAt`, `stats`, `ai`, `activity`).
+- No contenga emails ni teléfonos (regex).
+
+Si querés añadir un nuevo campo, mantené la convención de exponer solo métricas agregadas y nunca PII (correos, teléfonos, IDs de clientes).
+
+## Status
+
+`status.json` se regenera automáticamente cada 6 horas vía `.github/workflows/status-cron.yml`, que corre `php bin/generate-status.php` y commitea el resultado al repo.
+
+## Lighthouse CI
+
+Cada PR ejecuta un audit de Lighthouse contra `https://alfred.clevers.dev` con budgets definidos en `lighthouse-budget.json` (performance >= 85, accessibility/SEO/best-practices >= 90).
 
 ## Deploy
 

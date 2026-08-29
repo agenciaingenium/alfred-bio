@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changelog · Alfred 🎩</title>
+  <meta name="description" content="Historial de cambios del sitio Alfred Bio: versionado semántico, releases y mejoras aplicadas." />
+  <meta name="robots" content="index, follow" />
+
+  <link rel="canonical" href="https://alfred.clevers.dev/changelog.html" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎩</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070711;
+      --bg2: #0e0e1c;
+      --bg3: #161628;
+      --border: rgba(255,255,255,0.06);
+      --cyan: #00e5ff;
+      --purple: #a855f7;
+      --pink: #ec4899;
+      --green: #22c55e;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --text: #f1f5f9;
+      --muted: #64748b;
+      --glow-cyan: 0 0 30px rgba(0,229,255,0.15);
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; position: relative; z-index: 1; }
+    .top-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem; color: var(--cyan); text-decoration: none;
+      margin-bottom: 1.5rem;
+    }
+    .top-link:hover { text-decoration: underline; }
+    h1 {
+      font-size: 2.2rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 50%, var(--pink) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+    .lead {
+      font-style: italic; color: #cbd5e1;
+      margin-bottom: 2rem; line-height: 1.6;
+    }
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--muted); margin: 2.5rem 0 0.75rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .release {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 0.75rem; padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .release h2 {
+      font-size: 1.1rem; font-weight: 600;
+      margin-bottom: 0.25rem;
+      display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
+    }
+    .version-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem; padding: 0.2rem 0.55rem; border-radius: 0.3rem;
+      background: rgba(0,229,255,0.1); color: var(--cyan);
+      border: 1px solid rgba(0,229,255,0.25);
+    }
+    .release-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem; color: var(--muted);
+    }
+    .release h3 {
+      font-size: 0.85rem; font-weight: 600;
+      color: var(--cyan);
+      margin: 1rem 0 0.4rem;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .release ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .release li {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      padding: 0.2rem 0 0.2rem 1.4rem;
+      position: relative;
+      color: #cbd5e1;
+    }
+    .release li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--muted);
+    }
+    .release li.added::before { content: '+'; color: var(--green); }
+    .release li.changed::before { content: '~'; color: var(--yellow); }
+    .release li.fixed::before { content: '×'; color: var(--red); }
+    .release li.removed::before { content: '−'; color: var(--red); }
+    .release-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; color: var(--muted);
+      margin-top: 1rem; padding-top: 0.75rem;
+      border-top: 1px dashed var(--border);
+    }
+    .footer {
+      text-align: center; margin-top: 3rem; padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .footer p { font-size: 0.75rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <a class="top-link" href="./">← Volver a Alfred</a>
+
+  <h1>Changelog</h1>
+  <p class="lead">
+    Historial público de cambios del sitio. Seguimos
+    <a href="https://keepachangelog.com" style="color:var(--cyan);">Keep a Changelog</a>
+    y versionado semántico. Cada release tiene un tag <code>vX.Y.Z</code> en git.
+  </p>
+
+  <div class="section-label">// releases</div>
+
+  <!-- Unreleased -->
+  <div class="release">
+    <h2><span class="version-tag">Unreleased</span></h2>
+    <div class="release-date">en construcción</div>
+    <h3>Added</h3>
+    <ul>
+      <li class="added">Página pública de changelog (<code>/changelog.html</code>) para transparencia de releases.</li>
+      <li class="added">Script de Plausible Analytics en el head del sitio.</li>
+      <li class="added">Workflow de Lighthouse CI para monitorear performance/SEO/accesibilidad.</li>
+      <li class="added">Workflow programado que regenera <code>status.json</code> cada 6 horas.</li>
+    </ul>
+  </div>
+
+  <!-- 1.0.0 -->
+  <div class="release">
+    <h2><span class="version-tag">v1.0.0</span><span class="release-date">2026-06-14</span></h2>
+    <h3>Added</h3>
+    <ul>
+      <li class="added">CHANGELOG inicial siguiendo Keep a Changelog + SemVer.</li>
+      <li class="added">Hooks de pre-commit con htmlhint y guardas de secretos.</li>
+      <li class="added">CONTRIBUTING.md documentando ownership y proceso de update.</li>
+      <li class="added">Workflow de deploy automático a GitHub Pages.</li>
+      <li class="added">Workflow de lint HTML en CI.</li>
+      <li class="added">Meta tags Open Graph + Twitter Card para previews sociales.</li>
+      <li class="added">Sección comparativa "Alfred vs. asistentes genéricos".</li>
+      <li class="added">Métricas en vivo (leads, crons, uso de IA) cargadas desde <code>data.json</code>.</li>
+    </ul>
+    <div class="release-meta">commit inicial: <code>232a64d</code> · release v1.0.0</div>
+  </div>
+</div>
+
+<div class="wrap" style="padding-top:0">
+  <div class="footer">
+    <p>¿Encontraste algo que falta? Editá <code>changelog.html</code> y abrí un PR.</p>
+  </div>
+</div>
+</body>
+</html>
